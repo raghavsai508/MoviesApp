@@ -8,26 +8,54 @@
 
 import UIKit
 
+protocol MovieCellDelegate: AnyObject {
+    func favoriteClicked(at indexPath: IndexPath)
+}
+
+
 class MovieCell: UICollectionViewCell {
     
     @IBOutlet weak var imageViewPoster: UIImageView!
+    @IBOutlet weak var btnFavorite: UIButton!
+    
+    weak var delegate: MovieCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
     }
     
-    func configure(imageName: String) {
+    func configure(movieDetail: MovieDetail, indexPath: IndexPath) {
         let networkManager = NetworkManager.sharedInstance()
-        _ = networkManager.getPosterMovie(imageName: imageName, completionHandlerForMovieImage: { (image, error) in
-            DispatchQueue.main.async {
-                if error != nil {
-                    print(error!)
-                } else {
-                    self.imageViewPoster.image = image
+        if let posterPath = movieDetail.posterPath, movieDetail.image == nil {
+            _ = networkManager.getPosterMovie(imageName: posterPath, completionHandlerForMovieImage: { (image, error) in
+                DispatchQueue.main.async {
+                    if error != nil {
+                        print(error!)
+                    } else {
+                        self.imageViewPoster.image = image
+                        movieDetail.image = image?.pngData()
+                    }
                 }
-            }
-        })
+            })
+        } else if let image = movieDetail.image {
+            let image = UIImage(data: image)
+            imageViewPoster.image = image
+        }
+        
+        btnFavorite.tag = indexPath.item
+        var imageName = "unfavorite"
+        if movieDetail.isFavorite {
+            imageName = "favorite"
+        }
+        
+        btnFavorite.setImage(UIImage(named: imageName), for: .normal)
     }
+    
+    @IBAction func btnFavoriteAction(_ sender: UIButton) {
+        let indexPath = IndexPath(item: sender.tag, section: 0)
+        delegate?.favoriteClicked(at: indexPath)
+    }
+    
     
     override func prepareForReuse() {
         super.prepareForReuse()

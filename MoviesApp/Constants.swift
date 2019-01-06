@@ -33,5 +33,9 @@ struct Constants {
         static let APIKey = ""
     }
     
+    // MARK: PersistentStore
+    struct PersistentStore {
+        static let ModelName = "MoviesModel"
+    }
     
 }

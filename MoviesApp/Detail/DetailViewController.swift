@@ -18,7 +18,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var lblVoteAverage: UILabel!
     @IBOutlet weak var lblDescription: UILabel!
     
-    var movie: Movie!
+    var movieDetail: MovieDetail!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,23 +29,28 @@ class DetailViewController: UIViewController {
     
     
     func loadMovieDetails() {
-        lblTitle.text = movie.title
-        lblDate.text = movie.releaseDate
-        lblPopularity.text = "\(movie.popularity)"
-        lblVoteCount.text = "\(movie.voteCount)"
-        lblVoteAverage.text = "\(movie.voteAverage)"
-        lblDescription.text = movie.overview
+        lblTitle.text = movieDetail.title
+        lblDate.text = movieDetail.releaseDate
+        lblPopularity.text = "\(movieDetail.popularity)"
+        lblVoteCount.text = "\(movieDetail.voteCount)"
+        lblVoteAverage.text = "\(movieDetail.voteAverage)"
+        lblDescription.text = movieDetail.overview
         
-        let networkManager = NetworkManager.sharedInstance()
-        _ = networkManager.getPosterMovie(imageName: movie.posterPath, completionHandlerForMovieImage: { (image, error) in
-            DispatchQueue.main.async {
-                if error != nil {
-                    print(error!)
-                } else {
-                    self.imageViewPoster.image = image
+        if let image = movieDetail.image {
+            let image = UIImage(data: image)
+            imageViewPoster.image = image
+        } else if let posterPath = movieDetail.posterPath {
+            let networkManager = NetworkManager.sharedInstance()
+            _ = networkManager.getPosterMovie(imageName: posterPath, completionHandlerForMovieImage: { (image, error) in
+                DispatchQueue.main.async {
+                    if error != nil {
+                        print(error!)
+                    } else {
+                        self.imageViewPoster.image = image
+                    }
                 }
-            }
-        })
+            })
+        }
     }
 
 }
