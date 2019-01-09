@@ -106,7 +106,7 @@ class MoviesCollectionViewController: UIViewController {
         userDefaults.set(pageNumber, forKey: Constants.MovieSettings.Page)
         userDefaults.synchronize()
         
-        if let movies = fetchedResultsController.fetchedObjects {
+        if let movies = fetchedResultsController?.fetchedObjects {
             for movieDetail in movies {
                 if movieDetail.isFavorite == false {
                     dataController.viewContext.delete(movieDetail)

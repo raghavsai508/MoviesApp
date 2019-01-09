@@ -100,7 +100,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="vSk-ff-cwy"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Favorites" id="5d1-w0-zp1"/>
+                    <tabBarItem key="tabBarItem" title="Favorites" image="favorite" id="5d1-w0-zp1"/>
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -364,7 +364,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="9kd-Og-b2U"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Movies" id="pOp-br-dPp"/>
+                    <tabBarItem key="tabBarItem" title="Movies" image="movie" id="pOp-br-dPp"/>
                     <connections>
                         <outlet property="btnRefresh" destination="Lnw-rf-gbd" id="7xT-td-syT"/>
                         <outlet property="moviesCollectionView" destination="SAe-EN-gB0" id="6O4-ml-sf0"/>
@@ -396,6 +396,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="favorite" width="48" height="48"/>
+        <image name="movie" width="48" height="48"/>
         <image name="unfavorite" width="48" height="48"/>
     </resources>
 </document>
