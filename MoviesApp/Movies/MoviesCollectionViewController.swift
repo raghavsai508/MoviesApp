@@ -82,7 +82,7 @@ class MoviesCollectionViewController: UIViewController {
     }
     
     fileprivate func setupFetchedResultsController() {
-        let fetchRequest:NSFetchRequest<MovieDetail> = MovieDetail.fetchRequest()
+        let fetchRequest:NSFetchRequest<MovieDetail> = MovieDetail.fetchRequest()        
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
 
@@ -91,12 +91,6 @@ class MoviesCollectionViewController: UIViewController {
         
         do {
             try fetchedResultsController.performFetch()
-            
-//            if let moviesDetailsFetched = fetchedResultsController.fetchedObjects {
-//                for movieDetail in moviesDetailsFetched {
-//                    fetchedMovieIds.append(Int(movieDetail.movieId))
-//                }
-//            }
         } catch {
             fatalError("The fetch could not be performed: \(error.localizedDescription)")
         }
@@ -113,7 +107,7 @@ extension MoviesCollectionViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let movieDetail = fetchedResultsController.object(at: indexPath)
-        let movieCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as! MovieCell
+        let movieCell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCell.reuseIdentifier, for: indexPath) as! MovieCell
         movieCell.delegate = self
         movieCell.configure(movieDetail: movieDetail, indexPath: indexPath)
         
@@ -154,8 +148,8 @@ extension MoviesCollectionViewController: UICollectionViewDelegateFlowLayout {
 extension MoviesCollectionViewController: MovieCellDelegate {
     
     func favoriteClicked(at indexPath: IndexPath) {
-        
-        
+        let movieDetail = fetchedResultsController.object(at: indexPath)
+        movieDetail.isFavorite = !movieDetail.isFavorite
     }
     
 }
@@ -181,7 +175,16 @@ extension MoviesCollectionViewController: NSFetchedResultsControllerDelegate {
                 strongSelf.moviesCollectionView.deleteItems(at: [indexPath!])
             }))
             break
-        case .update, .move:
+        case .update:
+            blockOperations.append(BlockOperation(block: { [weak self] in
+                guard let strongSelf = self else {
+                    return
+                }
+                strongSelf.moviesCollectionView.reloadItems(at: [indexPath!])
+            }))
+            break
+            
+        case .move:
             break
         }
     }

@@ -52,5 +52,10 @@ class DetailViewController: UIViewController {
             })
         }
     }
-
+    
+    //MARK: Action Methods
+    @IBAction func btnBack(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+    }
+    
 }

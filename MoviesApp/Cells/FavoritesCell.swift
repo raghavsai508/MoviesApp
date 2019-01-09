@@ -1,24 +1,17 @@
 //
-//  MovieCell.swift
+//  FavoritesCell.swift
 //  MoviesApp
 //
-//  Created by Raghav Sai Cheedalla on 12/25/18.
-//  Copyright © 2018 Swift Enthusiast. All rights reserved.
+//  Created by Raghav Sai Cheedalla on 1/7/19.
+//  Copyright © 2019 Swift Enthusiast. All rights reserved.
 //
 
 import UIKit
 
-protocol MovieCellDelegate: AnyObject {
-    func favoriteClicked(at indexPath: IndexPath)
-}
-
-
-class MovieCell: UICollectionViewCell, Cell {
+class FavoritesCell: UICollectionViewCell, Cell {
     
     @IBOutlet weak var imageViewPoster: UIImageView!
-    @IBOutlet weak var btnFavorite: UIButton!
-    
-    weak var delegate: MovieCellDelegate?
+    @IBOutlet weak var selectionView: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -41,25 +34,14 @@ class MovieCell: UICollectionViewCell, Cell {
             let image = UIImage(data: image)
             imageViewPoster.image = image
         }
-        
-        btnFavorite.tag = indexPath.item
-        var imageName = "unfavorite"
-        if movieDetail.isFavorite {
-            imageName = "favorite"
-        }
-        
-        btnFavorite.setImage(UIImage(named: imageName), for: .normal)
     }
-    
-    @IBAction func btnFavoriteAction(_ sender: UIButton) {
-        let indexPath = IndexPath(item: sender.tag, section: 0)
-        delegate?.favoriteClicked(at: indexPath)
-    }
-    
     
     override func prepareForReuse() {
         super.prepareForReuse()
         imageViewPoster.image = nil
+        selectionView.backgroundColor = UIColor.clear
     }
+    
+    
     
 }

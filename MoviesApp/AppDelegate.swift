@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -24,6 +25,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tabbarController = navigationController.topViewController as! UITabBarController
         let moviesCollectionController = tabbarController.viewControllers![0] as! MoviesCollectionViewController
         moviesCollectionController.dataController = dataController
+        
+        let favoritesCollectionController = tabbarController.viewControllers![1] as! FavoritesViewController
+        favoritesCollectionController.dataController = dataController
         
         return true
     }
@@ -49,11 +53,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        deleteAllUnFavorites()
         saveViewContext()
     }
 
     func saveViewContext() {
         try? dataController.viewContext.save()
+    }
+    
+    func deleteAllUnFavorites() {
+        let fetchRequest:NSFetchRequest<MovieDetail> = MovieDetail.fetchRequest()
+        
+        let predicate = NSPredicate(format: "isFavorite == %@", NSNumber(value: false))
+        fetchRequest.predicate = predicate
+        
+        var results: [NSManagedObject] = []
+
+        do {
+            results = try dataController.viewContext.fetch(fetchRequest)
+            for object in results {
+                dataController.viewContext.delete(object)
+            }
+        }
+        catch {
+            print("error executing fetch request: \(error)")
+        }
+        
     }
 
 }
