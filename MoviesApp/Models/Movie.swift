@@ -13,7 +13,6 @@ struct Movie: Codable {
     let adult: Bool
     let overview: String
     let releaseDate: String
-//    let genreIds: NSArray
     let id: Int
     let originalTitle: String
     let originalLanguage: String
@@ -30,7 +29,6 @@ struct Movie: Codable {
         case adult
         case overview
         case release_date
-//        case genre_ids
         case id
         case original_title
         case original_language
@@ -53,7 +51,6 @@ extension Movie {
         adult = try container.decode(Bool.self, forKey: .adult)
         overview = try container.decode(String.self, forKey: .overview)
         releaseDate = try container.decode(String.self, forKey: .release_date)
-//        genreIds = try container.decode(NSArray.self, forKey: .genre_ids)
         id = try container.decode(Int.self, forKey: .id)
         originalTitle = try container.decode(String.self, forKey: .original_title)
         originalLanguage = try container.decode(String.self, forKey: .original_language)

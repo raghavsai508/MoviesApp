@@ -73,11 +73,7 @@ class FavoritesViewController: UIViewController {
     //MARK: Action Methods
     @IBAction func btnEditAction(_ sender: UIBarButtonItem) {
         
-        if isEditingMode {
-            btnEdit.title = "Edit"
-        } else {
-            btnEdit.title = "Done"
-        }
+        btnEdit.title = isEditingMode ? "Edit": "Done"
         isEditingMode = !isEditingMode
 
     }

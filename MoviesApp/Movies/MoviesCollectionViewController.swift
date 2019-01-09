@@ -30,6 +30,13 @@ class MoviesCollectionViewController: UIViewController {
         loadPopularMovies()
     }
     
+    fileprivate func showErrorAlert(error: Error) {
+        let alertController = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
     func loadPopularMovies(page: Int = 1) {
         let networkManager = NetworkManager.sharedInstance()
         _ = networkManager.getMovies(page: page) { [weak self](moviesArray, error) in
@@ -40,6 +47,7 @@ class MoviesCollectionViewController: UIViewController {
                 
                 if error != nil {
                     print(error!)
+                    strongSelf.showErrorAlert(error: error!)
                 } else {
                     if let moviesArray = moviesArray {
                         for movie in moviesArray {
@@ -96,7 +104,7 @@ class MoviesCollectionViewController: UIViewController {
     
     //MARK: Action Methods
     
-    @IBAction func btnRefresh(_ sender: Any) {
+    @IBAction func buttonRefresh(_ sender: Any) {
         let userDefaults = UserDefaults.standard
         var pageNumber = userDefaults.integer(forKey: Constants.MovieSettings.Page)
         if pageNumber == 1000 {

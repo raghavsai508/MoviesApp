@@ -287,7 +287,7 @@
                                     <navigationItem id="mmS-Kc-5xT">
                                         <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="Lnw-rf-gbd">
                                             <connections>
-                                                <action selector="btnRefresh:" destination="J0a-Gf-YNK" id="i7c-M6-LGf"/>
+                                                <action selector="buttonRefresh:" destination="J0a-Gf-YNK" id="i7c-M6-LGf"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
