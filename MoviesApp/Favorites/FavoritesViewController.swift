@@ -20,6 +20,9 @@ class FavoritesViewController: UIViewController {
     var fetchedResultsController: NSFetchedResultsController<MovieDetail>!
     
     var isEditingMode: Bool = false
+
+    fileprivate let kLeftPadding: CGFloat = 4.5
+    fileprivate let kRightPadding: CGFloat = 4.5
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,6 +114,15 @@ extension FavoritesViewController: UICollectionViewDelegateFlowLayout {
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = (view.bounds.size.width/2.0)-kRightPadding-kLeftPadding
+        let size = CGSize(width: width, height: width)
+        return size
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: kLeftPadding/2, bottom: 0, right: kRightPadding/2)
+    }
 }
 
 extension FavoritesViewController: NSFetchedResultsControllerDelegate {

@@ -12,12 +12,16 @@ import CoreData
 class MoviesCollectionViewController: UIViewController {
     
     @IBOutlet weak var moviesCollectionView: UICollectionView!
+    @IBOutlet weak var btnRefresh: UIBarButtonItem!
     
     var movies: [Movie]?
     var dataController: DataController!
     var blockOperations: [BlockOperation] = []
     var fetchedResultsController: NSFetchedResultsController<MovieDetail>!
     var fetchedMovieIds: [Int] = []
+    
+    fileprivate let kLeftPadding: CGFloat = 4.5
+    fileprivate let kRightPadding: CGFloat = 4.5
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,14 +30,9 @@ class MoviesCollectionViewController: UIViewController {
         loadPopularMovies()
     }
     
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//        fetchedResultsController = nil
-//    }
-    
-    func loadPopularMovies() {
+    func loadPopularMovies(page: Int = 1) {
         let networkManager = NetworkManager.sharedInstance()
-        _ = networkManager.getMovies { [weak self](moviesArray, error) in
+        _ = networkManager.getMovies(page: page) { [weak self](moviesArray, error) in
             DispatchQueue.main.async {
                 guard let strongSelf = self else {
                     return
@@ -42,7 +41,6 @@ class MoviesCollectionViewController: UIViewController {
                 if error != nil {
                     print(error!)
                 } else {
-//                    print(moviesArray!)
                     if let moviesArray = moviesArray {
                         for movie in moviesArray {
                             if !strongSelf.movieDetailExists(id: movie.id) {
@@ -96,6 +94,29 @@ class MoviesCollectionViewController: UIViewController {
         }
     }
     
+    //MARK: Action Methods
+    
+    @IBAction func btnRefresh(_ sender: Any) {
+        let userDefaults = UserDefaults.standard
+        var pageNumber = userDefaults.integer(forKey: Constants.MovieSettings.Page)
+        if pageNumber == 1000 {
+            pageNumber = 0
+        }
+        pageNumber = pageNumber + 1
+        userDefaults.set(pageNumber, forKey: Constants.MovieSettings.Page)
+        userDefaults.synchronize()
+        
+        if let movies = fetchedResultsController.fetchedObjects {
+            for movieDetail in movies {
+                if movieDetail.isFavorite == false {
+                    dataController.viewContext.delete(movieDetail)
+                }
+            }
+        }
+        
+        loadPopularMovies(page: pageNumber)
+    }
+    
 }
 
 
@@ -141,6 +162,16 @@ extension MoviesCollectionViewController: UICollectionViewDelegateFlowLayout {
         let detailViewControler = storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
         detailViewControler.movieDetail = movieDetail
         navigationController?.pushViewController(detailViewControler, animated: true)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = (view.bounds.size.width/2.0)-kRightPadding-kLeftPadding
+        let size = CGSize(width: width, height: width)
+        return size
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: kLeftPadding/2, bottom: 0, right: kRightPadding/2)
     }
     
 }

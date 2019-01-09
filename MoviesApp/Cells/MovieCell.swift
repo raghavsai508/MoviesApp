@@ -18,6 +18,8 @@ class MovieCell: UICollectionViewCell, Cell {
     @IBOutlet weak var imageViewPoster: UIImageView!
     @IBOutlet weak var btnFavorite: UIButton!
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     weak var delegate: MovieCellDelegate?
     
     override func awakeFromNib() {
@@ -27,8 +29,12 @@ class MovieCell: UICollectionViewCell, Cell {
     func configure(movieDetail: MovieDetail, indexPath: IndexPath) {
         let networkManager = NetworkManager.sharedInstance()
         if let posterPath = movieDetail.posterPath, movieDetail.image == nil {
+            if !activityIndicator.isAnimating {
+                activityIndicator.startAnimating()
+            }
             _ = networkManager.getPosterMovie(imageName: posterPath, completionHandlerForMovieImage: { (image, error) in
                 DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
                     if error != nil {
                         print(error!)
                     } else {

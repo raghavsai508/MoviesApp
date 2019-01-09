@@ -284,7 +284,13 @@
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m27-3U-tK1">
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                 <items>
-                                    <navigationItem id="mmS-Kc-5xT"/>
+                                    <navigationItem id="mmS-Kc-5xT">
+                                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="Lnw-rf-gbd">
+                                            <connections>
+                                                <action selector="btnRefresh:" destination="J0a-Gf-YNK" id="i7c-M6-LGf"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
                                 </items>
                             </navigationBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="SAe-EN-gB0">
@@ -307,6 +313,13 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1y8-Ha-4iM">
                                                     <rect key="frame" x="0.0" y="0.0" width="138" height="159"/>
                                                 </imageView>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Fmf-6C-b84">
+                                                    <rect key="frame" x="54" y="64.5" width="30" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="30" id="HLm-Uj-CJb"/>
+                                                        <constraint firstAttribute="width" secondItem="Fmf-6C-b84" secondAttribute="height" multiplier="1:1" id="vTa-lB-Wbh"/>
+                                                    </constraints>
+                                                </activityIndicatorView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8IM-fu-Ug4">
                                                     <rect key="frame" x="90" y="8" width="40" height="40"/>
                                                     <constraints>
@@ -321,14 +334,17 @@
                                             </subviews>
                                         </view>
                                         <constraints>
+                                            <constraint firstItem="Fmf-6C-b84" firstAttribute="centerY" secondItem="3XX-gy-pU4" secondAttribute="centerY" id="Alz-iQ-opO"/>
                                             <constraint firstAttribute="bottom" secondItem="1y8-Ha-4iM" secondAttribute="bottom" id="GHz-Db-dbe"/>
                                             <constraint firstAttribute="trailing" secondItem="8IM-fu-Ug4" secondAttribute="trailing" constant="8" id="XMU-5t-dpB"/>
                                             <constraint firstAttribute="trailing" secondItem="1y8-Ha-4iM" secondAttribute="trailing" id="Yl4-7g-cVE"/>
+                                            <constraint firstItem="Fmf-6C-b84" firstAttribute="centerX" secondItem="3XX-gy-pU4" secondAttribute="centerX" id="fxy-se-ybc"/>
                                             <constraint firstItem="1y8-Ha-4iM" firstAttribute="leading" secondItem="3XX-gy-pU4" secondAttribute="leading" id="gZy-8D-EZq"/>
                                             <constraint firstItem="8IM-fu-Ug4" firstAttribute="top" secondItem="3XX-gy-pU4" secondAttribute="top" constant="8" id="ia7-M2-5kl"/>
                                             <constraint firstItem="1y8-Ha-4iM" firstAttribute="top" secondItem="3XX-gy-pU4" secondAttribute="top" id="xkn-8D-8j5"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="activityIndicator" destination="Fmf-6C-b84" id="ZDT-1r-glX"/>
                                             <outlet property="btnFavorite" destination="8IM-fu-Ug4" id="LTT-G2-dbi"/>
                                             <outlet property="imageViewPoster" destination="1y8-Ha-4iM" id="fcU-R1-XMD"/>
                                         </connections>
@@ -350,6 +366,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Movies" id="pOp-br-dPp"/>
                     <connections>
+                        <outlet property="btnRefresh" destination="Lnw-rf-gbd" id="7xT-td-syT"/>
                         <outlet property="moviesCollectionView" destination="SAe-EN-gB0" id="6O4-ml-sf0"/>
                     </connections>
                 </viewController>

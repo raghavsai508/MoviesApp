@@ -11,9 +11,10 @@ import UIKit
 
 extension NetworkManager {
     
-    func getMovies(_ completionHandlerForMovies: @escaping(_ movies: [Movie]?, _ error: Error?) -> Void) -> URLSessionDataTask? {
+    func getMovies(page: Int, _ completionHandlerForMovies: @escaping(_ movies: [Movie]?, _ error: Error?) -> Void) -> URLSessionDataTask? {
         
-        let parameters = [Constants.MovieDBKeys.APIKey: Constants.MovieDBValues.APIKey] as [String: AnyObject]
+        let parameters = [Constants.MovieDBKeys.APIKey: Constants.MovieDBValues.APIKey,
+                          Constants.MovieDBKeys.APIPage: page] as [String: AnyObject]
         
         let url = urlFromParameters(parameters, withPathExtension: Constants.MovieDB.APIPath)
         print(url)
